@@ -1,12 +1,27 @@
 const models = require('../models');
 
-const { Account } = models;
+const { Account, Domo } = models;
 
 const loginPage = (req, res) => res.render('login');
 
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
+};
+
+const deactivatePage = (req, res) => res.render('deactivate');
+
+// Delete account and all associated Domos
+const deactivate = async (req, res) => {
+  const UID = req.session.account._id;
+  const targetAccount = await Account.findById(UID);
+
+  await Domo.deleteMany({ owner: UID });
+  await targetAccount.deleteOne();
+
+  req.session.destroy();
+  res.redirect('/');
+  return res.status(204);
 };
 
 const login = (req, res) => {
@@ -60,5 +75,7 @@ module.exports = {
   loginPage,
   login,
   logout,
+  deactivatePage,
+  deactivate,
   signup,
 };

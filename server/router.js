@@ -11,6 +11,9 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
+  app.get('/deactivate', mid.requiresLogin, controllers.Account.deactivatePage);
+  app.post('/deactivate', mid.requiresLogin, controllers.Account.deactivate);
+
   app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
   app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
 
